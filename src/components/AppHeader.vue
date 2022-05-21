@@ -5,16 +5,24 @@
 
       <v-spacer></v-spacer>
 
-      <v-btn> boards </v-btn>
-      <v-btn> exit </v-btn>
+      <v-btn color="accent" plain>boards</v-btn>
+      <v-btn color="accent" plain @click="signOut()">exit</v-btn>
     </v-app-bar>
   </div>
 </template>
 
 
 <script>
+import { exit } from "@/api/auth";
+
 export default {
   name: "AppHeader",
+  methods: {
+    async signOut() {
+      await exit();
+      this.$router.push("/login");
+    },
+  },
 };
 </script>
 

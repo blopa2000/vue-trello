@@ -8,21 +8,23 @@ import vuetify from "./plugins/vuetify";
 
 Vue.config.productionTip = false;
 
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    const usuarioActivo = {
-      email: user.email,
-      uid: user.uid,
-    };
-    store.dispatch("detectarUsuario", usuarioActivo);
-  } else {
-    store.dispatch("detectarUsuario", user);
-  }
-});
+(async () => {
+  await onAuthStateChanged(auth, (currentUser) => {
+    if (currentUser) {
+      const user = {
+        email: currentUser.email,
+        uid: currentUser.uid,
+      };
+      store.dispatch("detectUser", user);
+    } else {
+      store.dispatch("detectUser", null);
+    }
+  });
 
-new Vue({
-  store,
-  router,
-  vuetify,
-  render: (h) => h(App),
-}).$mount("#app");
+  new Vue({
+    store,
+    router,
+    vuetify,
+    render: (h) => h(App),
+  }).$mount("#app");
+})();

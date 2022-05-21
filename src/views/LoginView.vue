@@ -10,9 +10,8 @@
 </template>
 
 <script>
-import { auth } from "../api/firebase";
-import { signInWithEmailAndPassword } from "firebase/auth";
 import { mapState } from "vuex";
+import { signIn } from "@/api/auth";
 export default {
   data() {
     return {
@@ -21,24 +20,22 @@ export default {
     };
   },
 
-  created() {
-    if (this.usuario.udi !== "") {
-      this.$router.push("/");
-    }
+  watch: {
+    user() {
+      console.log("user", this.user);
+      if (this.user !== null) {
+        this.$router.push("/");
+      }
+    },
   },
 
   methods: {
     async login() {
-      const res = await signInWithEmailAndPassword(
-        auth,
-        this.name,
-        this.password
-      );
-      console.log(res);
+      await signIn(this.name, this.password);
     },
   },
   computed: {
-    ...mapState(["usuario"]),
+    ...mapState(["user"]),
   },
 };
 </script>

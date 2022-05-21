@@ -1,10 +1,10 @@
 <template>
   <v-layout wrap>
     <v-flex
-      md6
+      md2
       v-for="(list, index) in lists"
       :key="index"
-      @drop="ondrop($event, list)"
+      @drop="ondrop($event, list.id)"
       @dragover.prevent
       @dragenter.prevent
     >
@@ -13,22 +13,32 @@
         <br />
         <v-card
           class="todo-card"
-          v-for="item in getList(list.id)"
-          :key="item.id"
+          v-for="task in getTasks(list.id)"
+          :key="task.id"
           draggable="true"
-          @dragstart="dragStart($event, item.id)"
+          @dragstart="dragStart($event, task.id)"
           elevation="1"
         >
-          {{ item.name }}
+          {{ task.name }}
         </v-card>
-        <v-text-field
-          label="Outlined"
-          outlined
-          value=""
-          @keyup.enter="add($event, list.id)"
-        ></v-text-field>
+        <input
+          type="text"
+          class="todo-input"
+          @keyup.enter="addTask($event, list.id)"
+          placeholder="add the task"
+        />
       </v-card>
     </v-flex>
+    <v-card class="card-add">
+      <v-card-title>
+        <v-text-field
+          v-model="newList"
+          label="Add a list"
+          append-icon="add"
+          @keyup.enter="addList()"
+        ></v-text-field>
+      </v-card-title>
+    </v-card>
   </v-layout>
 </template>
 
@@ -37,24 +47,34 @@ export default {
   name: "card-list",
   props: {
     lists: Array,
-    getList: Function,
+    getTasks: Function,
+  },
+  data() {
+    return {
+      newList: "",
+    };
   },
   methods: {
     dragStart(event, item) {
-      console.log(item);
       event.dataTransfer.dropEffect = "move";
       event.dataTransfer.effectAllowed = "move";
       event.dataTransfer.setData("itemID", item);
     },
 
-    ondrop(event, list) {
+    ondrop(event, listId) {
       const itemID = event.dataTransfer.getData("itemID");
-      this.$emit("drop", itemID, list);
+      this.$emit("drop", itemID, listId);
     },
 
-    add(event, list) {
-      this.$emit("add", event.target.value, list);
-      event.target.value = " ";
+    addTask(event, listId) {
+      this.$emit("addTask", event.target.value, listId);
+      event.target.value = "";
+    },
+    addList() {
+      if (this.newList !== "") {
+        this.$emit("addList", this.newList);
+        this.newList = "";
+      }
     },
   },
 };
@@ -92,5 +112,9 @@ export default {
 }
 .drag-el:nth-last-of-type(1) {
   margin-bottom: 0;
+}
+
+.card-add {
+  height: 95px;
 }
 </style>

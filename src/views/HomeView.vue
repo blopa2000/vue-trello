@@ -8,7 +8,7 @@
             label="Outlined"
             outlined
             v-model="boardName"
-            @keyup.enter="add()"
+            @keyup.enter="addNewBoard()"
           ></v-text-field>
         </v-flex>
       </v-layout>
@@ -30,47 +30,51 @@
 
 <script>
 import AppHeader from "@/components/AppHeader.vue";
+import { getBoardsByUser, createBoard } from "@/api/index";
+import { mapState } from "vuex";
 
 export default {
   name: "home-view",
   components: {
     AppHeader,
   },
-
   data() {
     return {
       boardName: "",
-      boards: [
-        {
-          id: "1",
-          name: "Tareas",
-        },
-        {
-          id: "2",
-          name: "Proyectos",
-        },
-        {
-          id: "3",
-          name: "Pendientes",
-        },
-        {
-          id: "3",
-          name: "Pendientes",
-        },
-      ],
+      boards: [],
     };
   },
-  methods: {
-    add() {
+  async created() {
+    const querySnapshot = await getBoardsByUser(this.user.uid);
+    querySnapshot.forEach((doc) => {
       this.boards.push({
-        id: this.boards.length + 1,
+        id: doc.id,
+        ...doc.data(),
+      });
+    });
+  },
+
+  mounted() {
+    if (!this.user || this.user.udi === "") {
+      this.$router.push("/login");
+    }
+  },
+
+  methods: {
+    showboard(id) {
+      this.$router.push(`board/${id}`);
+    },
+    async addNewBoard() {
+      const res = await createBoard(this.user.uid, this.boardName);
+      this.boards.push({
+        id: res.id,
         name: this.boardName,
       });
       this.boardName = "";
     },
-    showboard(id) {
-      this.$router.push(`board/${id}`);
-    },
+  },
+  computed: {
+    ...mapState(["user"]),
   },
 };
 </script>

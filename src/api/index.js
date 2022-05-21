@@ -1,56 +1,59 @@
-// import { db } from "./firebase";
-import { ref } from "firebase/database";
+import { db } from "@/api/firebase";
+import {
+  getDocs,
+  collection,
+  addDoc,
+  serverTimestamp,
+  query,
+  orderBy,
+  updateDoc,
+  doc,
+} from "firebase/firestore";
 
-const boardRef = ref("/boards");
-const listsRef = ref("/lists");
-const tasksRef = ref("/tasks");
+export const getBoardsByUser = async (userId) => {
+  return await getDocs(
+    query(collection(db, "users", userId, "boards"), orderBy("timestamp", "asc"))
+  );
+};
 
-export default {
-  getBoardsByUser(userId) {
-    const query = boardRef.orderByChild("owner").equalTo(userId);
-    return query.once("value");
-  },
-  postBoard(name) {
-    const id = boardRef.push().key;
-    const owner = 1;
-    const board = (id, name, owner);
-    return boardRef
-      .child(id)
-      .set(board)
-      .then(() => board);
-  },
-  getListsFromBoard(boardId) {
-    const query = listsRef.orderByChild("board").equalTo(boardId);
-    return query.once("value");
-  },
+export const createBoard = async (userId, board) => {
+  return await addDoc(collection(db, "users", userId, "boards"), {
+    name: board,
+    timestamp: serverTimestamp(),
+  });
+};
 
-  postList(board, name) {
-    const id = listsRef.push().key;
-    const column = { id, name, board };
+export const getListAndTaskById = async (userId, boardId) => {
+  const lists = await getDocs(
+    query(collection(db, "users", userId, "boards", boardId, "lists"), orderBy("timestamp", "asc"))
+  );
+  const tasks = await getDocs(
+    query(collection(db, "users", userId, "boards", boardId, "tasks"), orderBy("timestamp", "asc"))
+  );
 
-    return listsRef
-      .child(id)
-      .set(column)
-      .then(() => column);
-  },
-  getTasksFromList(listId) {
-    const query = tasksRef.orderByChild("list").equalTo(listId);
-    return query.once("value");
-  },
-  postTask(list, title) {
-    const id = tasksRef.push().key;
-    const task = { id, title, list, completed: false };
+  return {
+    lists,
+    tasks,
+  };
+};
 
-    return tasksRef
-      .child(id)
-      .set(task)
-      .then(() => task);
-  },
-  // updateTask(taskId, name) {},
-  deleteTask(taskId) {
-    return tasksRef.child(taskId).remove();
-  },
-  completedTask(taskId) {
-    return tasksRef.child(taskId).update({ completed: true });
-  },
+export const createList = async (userId, boardId, name) => {
+  return await addDoc(collection(db, "users", userId, "boards", boardId, "lists"), {
+    name,
+    timestamp: serverTimestamp(),
+  });
+};
+
+export const createTask = async (userId, boardId, listId, name) => {
+  return await addDoc(collection(db, "users", userId, "boards", boardId, "tasks"), {
+    name,
+    listId,
+    timestamp: serverTimestamp(),
+  });
+};
+
+export const updateTask = async (userId, boardId, taskId, listId) => {
+  return await updateDoc(doc(db, "users", userId, "boards", boardId, "tasks", taskId), {
+    listId,
+  });
 };

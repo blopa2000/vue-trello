@@ -5,26 +5,23 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    usuario: {
-      email: "",
-      uid: "",
-    },
+    user: null,
   },
   mutations: {
-    setUsuario(state, payload) {
-      state.usuario = payload;
+    setUser(state, payload) {
+      state.user = payload;
     },
   },
-  // Recibe datos de onAuthStateChanged (main.js)
+
   actions: {
-    detectarUsuario({ commit }, usuario) {
-      commit("setUsuario", usuario);
+    detectUser({ commit }, user) {
+      commit("setUser", user);
     },
   },
-  // Devuelve true/false si existe un usuario
+
   getters: {
-    existeUsuario(state) {
-      if (state.usuario === null) {
+    existUser(state) {
+      if (state.user === null) {
         return false;
       } else {
         return true;

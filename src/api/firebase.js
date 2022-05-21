@@ -1,11 +1,11 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
-import { getDatabase } from "firebase/database";
+import { getFirestore } from "firebase/firestore";
 import { getAnalytics } from "firebase/analytics";
 import settings from "./settings";
 
 const app = initializeApp(settings);
-const db = getDatabase();
+const db = getFirestore();
 const auth = getAuth();
 const analytics = getAnalytics(app);
 
