@@ -1,9 +1,12 @@
 <template>
   <v-form>
-    <v-container>
-      <v-card class="px-5 mt-5">
+    <v-container class="access-container">
+      <v-card class="access-card">
+        <div class="content-title">
+          <span class="headline">Sign up</span>
+        </div>
         <v-row>
-          <v-col cols="12" sm="6" md="3">
+          <v-col cols="12">
             <v-text-field
               label="email"
               type="email"
@@ -12,7 +15,7 @@
             ></v-text-field>
           </v-col>
 
-          <v-col cols="12" sm="6" md="3">
+          <v-col cols="12">
             <v-text-field
               label="Password"
               type="password"
@@ -20,8 +23,7 @@
               v-model="password"
             ></v-text-field>
           </v-col>
-
-          <v-col cols="12" sm="6" md="3">
+          <v-col cols="12">
             <v-btn
               color="primary"
               elevation="3"
@@ -30,6 +32,13 @@
               @click="createUser()"
               >send</v-btn
             >
+          </v-col>
+
+          <v-col cols="12">
+            <span>
+              you have an account?
+              <router-link to="/login">Login</router-link>
+            </span>
           </v-col>
         </v-row>
       </v-card>
@@ -46,7 +55,7 @@ export default {
   data() {
     return {
       email: "",
-      password: "1234567890",
+      password: "",
       loading: false,
     };
   },
@@ -54,7 +63,7 @@ export default {
   watch: {
     user() {
       console.log("user", this.user);
-      if (this.user !== null) {
+      if (this.user.email !== "") {
         this.$router.push("/");
       }
     },

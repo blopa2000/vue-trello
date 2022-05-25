@@ -17,7 +17,10 @@ Vue.config.productionTip = false;
       };
       store.dispatch("detectUser", user);
     } else {
-      store.dispatch("detectUser", null);
+      store.dispatch("detectUser", {
+        email: "",
+        uid: "",
+      });
     }
   });
 

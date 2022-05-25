@@ -5,11 +5,23 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    user: null,
+    user: {
+      uid: "",
+      email: "",
+    },
+    alert: {
+      show: false,
+      type: "error",
+      message: "",
+    },
   },
   mutations: {
     setUser(state, payload) {
       state.user = payload;
+    },
+
+    setAlert(state, payload) {
+      state.alert = payload;
     },
   },
 

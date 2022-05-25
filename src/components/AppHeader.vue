@@ -5,7 +5,7 @@
 
       <v-spacer></v-spacer>
 
-      <v-btn color="accent" plain>boards</v-btn>
+      <v-btn color="accent" plain @click="boards()">boards</v-btn>
       <v-btn color="accent" plain @click="signOut()">exit</v-btn>
     </v-app-bar>
   </div>
@@ -21,6 +21,9 @@ export default {
     async signOut() {
       await exit();
       this.$router.push("/login");
+    },
+    boards() {
+      this.$router.push("/");
     },
   },
 };

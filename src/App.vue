@@ -1,12 +1,17 @@
 <template>
   <v-app id="app">
+    <alert-message />
     <router-view />
   </v-app>
 </template>
 
 <script>
+import AlertMessage from "@/components/AlertMessage.vue";
 export default {
   name: "App",
+  components: {
+    AlertMessage,
+  },
 };
 </script>
 

@@ -1,35 +1,47 @@
 <template>
   <v-layout wrap>
     <v-flex
-      md2
+      md3
       v-for="(list, index) in lists"
       :key="index"
       @drop="ondrop($event, list.id)"
       @dragover.prevent
       @dragenter.prevent
     >
-      <v-card class="list-card p-5" elevation="1">
-        {{ list.name }}
-        <br />
+      <v-card class="list-card p-5" elevation="0">
+        <v-btn
+          class="btn-delete-list"
+          color="error"
+          icon
+          @click="deleteList(list.id)"
+          >X</v-btn
+        >
+        <div class="text-h6 heading font-weight-black">
+          {{ list.name }}
+        </div>
         <v-card
-          class="todo-card"
+          class="list-card-todo-card"
           v-for="task in getTasks(list.id)"
           :key="task.id"
           draggable="true"
           @dragstart="dragStart($event, task.id)"
           elevation="1"
         >
-          {{ task.name }}
-        </v-card>
+          <v-btn color="primary" icon @click="finishTask(task.id)">✔</v-btn>
+          <p class="list-card-todo-card-text">
+            {{ task.name }}
+          </p></v-card
+        >
+
         <input
           type="text"
-          class="todo-input"
+          class="list-card-todo-input"
           @keyup.enter="addTask($event, list.id)"
           placeholder="add the task"
         />
       </v-card>
     </v-flex>
-    <v-card class="card-add">
+    <v-card class="card-add" elevation="0">
       <v-card-title>
         <v-text-field
           v-model="newList"
@@ -43,6 +55,7 @@
 </template>
 
 <script>
+import { mapMutations } from "vuex";
 export default {
   name: "card-list",
   props: {
@@ -55,6 +68,7 @@ export default {
     };
   },
   methods: {
+    ...mapMutations(["setAlert"]),
     dragStart(event, item) {
       event.dataTransfer.dropEffect = "move";
       event.dataTransfer.effectAllowed = "move";
@@ -76,19 +90,63 @@ export default {
         this.newList = "";
       }
     },
+    finishTask(taskId) {
+      this.$emit("finishTask", taskId);
+    },
+    deleteList(listId) {
+      if (!this.getTasks(listId).length) {
+        this.$emit("deleteList", listId);
+      } else {
+        this.setAlert({
+          type: "error",
+          message:
+            "You can't delete a list with tasks. Please delete all tasks first.",
+          show: true,
+        });
+      }
+    },
   },
 };
 </script>
+
 <style lang="scss" scoped>
 .list-card {
   margin: 0.5em;
   padding: 20px;
   transition: all 200ms ease-in-out;
-  background: #f7f7f7;
-
-  .todo-card {
+  background: #eeeeee !important;
+  max-width: 400px !important;
+  position: relative;
+  .btn-delete-list {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+  }
+  &-todo-card {
     padding: 10px;
     margin: 10px;
+    display: flex;
+    align-items: center;
+    cursor: grab;
+    &-text {
+      font-size: 0.8em;
+      display: inline-block;
+      margin: 0;
+    }
+  }
+  &-todo-input {
+    width: 100%;
+    text-transform: capitalize;
+    border-radius: 0 !important;
+    &:focus {
+      outline: none;
+      border-radius: 0;
+      border: none;
+      border-bottom: 1px solid #2480e3;
+    }
+    &:focus::placeholder {
+      color: #2480e3;
+    }
   }
 }
 
@@ -116,5 +174,7 @@ export default {
 
 .card-add {
   height: 95px;
+  background: #eeeeee !important;
+  margin-top: 5px;
 }
 </style>

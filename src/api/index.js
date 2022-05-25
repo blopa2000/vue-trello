@@ -8,6 +8,7 @@ import {
   orderBy,
   updateDoc,
   doc,
+  deleteDoc,
 } from "firebase/firestore";
 
 export const getBoardsByUser = async (userId) => {
@@ -56,4 +57,21 @@ export const updateTask = async (userId, boardId, taskId, listId) => {
   return await updateDoc(doc(db, "users", userId, "boards", boardId, "tasks", taskId), {
     listId,
   });
+};
+
+export const deleteBoard = async (userId, boardId) => {
+  const lists = await getDocs(
+    query(collection(db, "users", userId, "boards", boardId, "lists"), orderBy("timestamp", "asc"))
+  );
+  if (!lists.empty) return false;
+  await deleteDoc(doc(db, "users", userId, "boards", boardId));
+  return true;
+};
+
+export const deleteTask = async (userId, boardId, taskId) => {
+  return await deleteDoc(doc(db, "users", userId, "boards", boardId, "tasks", taskId));
+};
+
+export const deleteList = async (userId, boardId, listId) => {
+  return await deleteDoc(doc(db, "users", userId, "boards", boardId, "lists", listId));
 };
