@@ -22,3 +22,17 @@ npm run lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+# development
+add the `settings.js` file in `src/api` and put your credential
+```
+export default {
+  apiKey: "xxxxxxxxxxx",
+  authDomain: "xxxxxxxxxxxxxxxxxx",
+  projectId: "xxxxxxxxxxxxxx",
+  storageBucket: "xxxxxxxxxxxxxxx",
+  messagingSenderId: "xxxxxxxxxxxxxxxxxxx",
+  appId: "xxxxxxxxxxxxxxxxxx",
+  measurementId: "xxxxxxxxxxxxxx",
+}
+```
