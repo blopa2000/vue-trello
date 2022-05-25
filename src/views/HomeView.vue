@@ -5,7 +5,7 @@
       <v-layout>
         <v-flex xs12 md6>
           <v-text-field
-            label="create new board"
+            label="Create new board"
             outlined
             v-model="boardName"
             @keyup.enter="addNewBoard()"
@@ -14,7 +14,7 @@
       </v-layout>
 
       <v-layout wrap>
-        <v-flex md6 v-for="(board, index) in boards" :key="index">
+        <v-flex xs12 sm6 md6 v-for="(board, index) in boards" :key="index">
           <v-card
             color="accent"
             class="board-card white--text"
@@ -32,6 +32,9 @@
 
             {{ board.name }}</v-card
           >
+        </v-flex>
+        <v-flex mb12 v-if="!boards.length">
+          <h1 class="empty-title-list">You don't have boards,create one</h1>
         </v-flex>
       </v-layout>
     </v-container>

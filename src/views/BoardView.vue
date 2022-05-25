@@ -11,6 +11,9 @@
         @finishTask="finishTask"
         @deleteList="deleteList"
       ></card-list>
+      <h1 v-if="!lists.length" class="empty-title-list">
+        you don't have a list and tasks, create one
+      </h1>
     </v-container>
   </div>
 </template>

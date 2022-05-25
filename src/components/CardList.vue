@@ -85,7 +85,7 @@ export default {
       event.target.value = "";
     },
     addList() {
-      if (this.newList !== "") {
+      if (this.newList.length > 0) {
         this.$emit("addList", this.newList);
         this.newList = "";
       }
@@ -136,13 +136,15 @@ export default {
   }
   &-todo-input {
     width: 100%;
-    text-transform: capitalize;
     border-radius: 0 !important;
     &:focus {
       outline: none;
       border-radius: 0;
       border: none;
       border-bottom: 1px solid #2480e3;
+    }
+    &::placeholder {
+      text-transform: capitalize;
     }
     &:focus::placeholder {
       color: #2480e3;
@@ -164,9 +166,6 @@ export default {
   padding: 5px;
   margin-bottom: 10px;
   transition: all 200ms ease-in-out;
-  &:-moz-drag-over {
-    background: red;
-  }
 }
 .drag-el:nth-last-of-type(1) {
   margin-bottom: 0;

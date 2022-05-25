@@ -71,7 +71,29 @@ export default {
 
   methods: {
     async createUser() {
-      await signUp(this.email, this.password);
+      try {
+        if (this.email === "" || this.password === "") {
+          this.setAlert("Please fill all fields", "error");
+          return;
+        }
+        await signUp(this.email, this.password);
+      } catch (error) {
+        let message = "";
+        if (error.code === "auth/email-already-in-use") {
+          message = "Email already in use";
+        } else if (error.code === "auth/invalid-email") {
+          message = "Invalid email";
+        } else if (error.code === "auth/weak-password") {
+          message = "Password is too weak";
+        } else {
+          message = "Something went wrong";
+        }
+        this.setAlert({
+          message,
+          type: "error",
+          show: true,
+        });
+      }
     },
   },
   computed: {

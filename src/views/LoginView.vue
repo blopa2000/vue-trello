@@ -51,6 +51,7 @@
 <script>
 import { mapState } from "vuex";
 import { signIn } from "@/api/auth";
+import { mapMutations } from "vuex";
 export default {
   name: "Login-view",
   data: () => ({
@@ -73,9 +74,27 @@ export default {
   },
 
   methods: {
+    ...mapMutations(["setAlert"]),
     async login() {
       if (this.email !== "" && this.password !== "") {
-        await signIn(this.email, this.password);
+        try {
+          await signIn(this.email, this.password);
+        } catch (error) {
+          let message = "";
+          if (error.code === "auth/user-not-found") {
+            message = "User not found";
+          } else if (error.code === "auth/wrong-password") {
+            message = "Wrong password";
+          } else if (error.code === "auth/invalid-email") {
+            message = "Invalid email";
+          }
+
+          this.setAlert({
+            message,
+            type: "error",
+            show: true,
+          });
+        }
       }
     },
   },

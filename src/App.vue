@@ -26,4 +26,9 @@ export default {
   margin: 0 auto;
   padding: 0;
 }
+.empty-title-list {
+  font-size: 2em;
+  text-align: center;
+  opacity: 0.5;
+}
 </style>
