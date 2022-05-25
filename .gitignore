@@ -1,8 +1,12 @@
 .DS_Store
 node_modules
+/.firebaserc
 /dist
 src/api/settings.js
 
+### Firebase Patch ###
+.runtimeconfig.json
+.firebase/
 
 # local env files
 .env.local

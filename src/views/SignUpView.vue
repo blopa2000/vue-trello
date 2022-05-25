@@ -51,7 +51,7 @@ import { signUp } from "@/api/auth";
 import { mapState } from "vuex";
 
 export default {
-  name: "SignUpView",
+  name: "Sign-up-view",
   data() {
     return {
       email: "",

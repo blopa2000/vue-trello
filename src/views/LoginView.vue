@@ -52,6 +52,7 @@
 import { mapState } from "vuex";
 import { signIn } from "@/api/auth";
 export default {
+  name: "Login-view",
   data: () => ({
     loading: false,
     email: "",

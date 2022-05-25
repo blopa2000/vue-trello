@@ -27,19 +27,29 @@ import {
   updateTask,
   deleteList,
 } from "@/api/index";
+
 export default {
+  name: "board-view",
   components: {
     AppHeader,
     CardList,
   },
+
   data() {
     return {
       tasks: [],
       lists: [],
     };
   },
+
   async created() {
     this.getListAndTasks();
+  },
+
+  mounted() {
+    if (!this.user.email && !this.user.udi) {
+      this.$router.push("/login");
+    }
   },
 
   watch: {

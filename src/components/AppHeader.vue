@@ -16,7 +16,7 @@
 import { exit } from "@/api/auth";
 
 export default {
-  name: "AppHeader",
+  name: "app-header",
   methods: {
     async signOut() {
       await exit();
